@@ -4,6 +4,15 @@ Social Wires es una red social que busca facilitar en un espacio publicaciones d
 
 Los usuarios se podrán registrar y con cuenta iniciada podrán publicar y ver mensajes de los demas usuarios.
 
+
+## Tecnologias usadas
+
+* NodeJS
+* ExpressJS
+* TypeScript
+* Mongoose
+* Express-validator
+
 Para crear los modulos de node ejecutar
 
 ```

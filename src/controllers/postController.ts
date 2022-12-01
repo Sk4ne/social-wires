@@ -23,8 +23,8 @@ import { Types } from 'mongoose';
 }
 export const getPosts = async(req:Request,res:Response,next:NextFunction)=>{
   try {
-     
-      const posts = await Post.find({})
+      const posts:any = await Post.find({})
+        .populate([{path:'user',strictPopulate: false }])
       res.status(200).json(posts);  
   } catch (err) {
       res.status(500).send({

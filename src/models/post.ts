@@ -1,5 +1,5 @@
 import mongoose,{ Schema } from 'mongoose'
-import Types from 'mongoose';
+import { Types } from 'mongoose';
 
 interface Post extends mongoose.Document{
   title:string;
@@ -11,7 +11,7 @@ interface Post extends mongoose.Document{
 const PostSchema = new Schema({
   title:String,
   description:String,
-  createAt:Date,
+  createAt:{type:Date,default: Date.now()},
   idUser: {type: Schema.Types.ObjectId,ref:'User'}
 },{versionKey:false})
 

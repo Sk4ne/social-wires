@@ -24,7 +24,23 @@ import { Types } from 'mongoose';
 export const getPosts = async(req:Request,res:Response,next:NextFunction)=>{
   try {
       const posts:any = await Post.find({})
-        .populate([{path:'user',strictPopulate: false }])
+         /* Hacemos referencia al campo idUser para pintar la informacion del usuario que creo el post */
+        .populate('idUser',{email:1,userName:1,nameComplete:1})
+      res.status(200).json(posts);  
+  } catch (err) {
+      res.status(500).send({
+          message: `An error ocurred ${err}`
+    });
+    next();  
+  }
+} 
+/* Buscar post usando regex */
+export const getPostsFilter = async(req:Request,res:Response,next:NextFunction)=>{
+  try {
+      let valor:any = req.query.valor;
+      let posts:any = await Post.find({'title':{$regex:valor,$options:'i'}})
+         /* Hacemos referencia al campo idUser para pintar la informacion del usuario que creo el post */
+        .populate('idUser',{email:1,userName:1,nameComplete:1});
       res.status(200).json(posts);  
   } catch (err) {
       res.status(500).send({
@@ -43,7 +59,8 @@ export const getPost = async(req:Request,res:Response,next:NextFunction)=>{
       _id: string | Types.ObjectId  
     }
     let { id } = req.params;
-    let postById:PostID | null = await Post.findById(id);
+    let postById:PostID | null = await Post.findById(id)
+                                 .populate('idUser',{email:1,userName:1,nameComplete:1})
     res.status(200).json(postById);  
   } catch (err) {
       res.status(500).send({

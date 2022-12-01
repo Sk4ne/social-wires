@@ -4,7 +4,7 @@ import './db/config'
 import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
-import router from './routes'
+import router from './routes/v1'
 const app = express();
 
 app.use(morgan('tiny'));
@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //MIDDLEWARES ROUTES
-app.use(router);
+app.use('/v1',router);
 app.use(express.static('public'));
 const history = require('connect-history-api-fallback');
 app.use(history());

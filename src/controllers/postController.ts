@@ -37,11 +37,24 @@ export const getPosts = async(req:Request,res:Response,next:NextFunction)=>{
 /* Buscar post usando regex */
 export const getPostsFilter = async(req:Request,res:Response,next:NextFunction)=>{
   try {
-      let valor:any = req.query.valor;
-      let posts:any = await Post.find({'title':{$regex:valor,$options:'i'}})
-         /* Hacemos referencia al campo idUser para pintar la informacion del usuario que creo el post */
-        .populate('idUser',{email:1,userName:1,nameComplete:1});
-      res.status(200).json(posts);  
+      let name:any = req.query.name;
+      const result:any = await Post.aggregate(
+        [
+          {
+            $lookup:
+              {
+                from: "users",
+                localField: "idUser",
+                foreignField: "_id",
+                as: "userCreatePost"
+              }
+         },
+         {$unwind: "$userCreatePost"},
+         {$match:{"userCreatePost.nameComplete":{$regex:name,$options:'i'}}}
+        ]
+      );
+
+      res.status(200).json(result)
   } catch (err) {
       res.status(500).send({
           message: `An error ocurred ${err}`
